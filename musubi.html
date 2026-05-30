@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musubi — Memory, Longing, and the Viral Image</title>
+  <link rel="stylesheet" href="musubi.css">
+</head>
+<body>
+
+<div id="scene">
+  <div id="bg-left">
+    <div class="img-track" id="track-left">
+      <img src="taki1.jpg" alt="Taki — Tokyo">
+    </div>
+  </div>
+  <div id="bg-right">
+    <div class="img-track" id="track-right">
+      <img src="mitsuha1.jpg" alt="Mitsuha — Itomori">
+    </div>
+  </div>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="divider"></div>
+  <div class="world-label" id="lbl-left">Taki · Tokyo</div>
+  <div class="world-label" id="lbl-right">Mitsuha · Itomori</div>
+  <div id="counter">0 / 12 memories surfaced</div>
+  <div id="hint">click anywhere to surface a memory</div>
+  <div class="drag-hint" id="dh-left">← drag to explore</div>
+  <div class="drag-hint" id="dh-right">drag to explore →</div>
+
+  <svg id="thread-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="frag-layer"></div>
+
+  <div id="ending">
+    <h2>繋がっている</h2>
+    <p>we were always connected — and yet the distance remains</p>
+  </div>
+
+  <button id="reset-btn">reset</button>
+</div>
+
+<script src="musubi.js"></script>
+</body>
+</html>
