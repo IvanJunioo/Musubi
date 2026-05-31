@@ -7,6 +7,7 @@ body {
   color: #fff;
   font-family: 'Cormorant Garamond', serif;
   overflow-x: hidden;
+  margin: 0; padding: 0;
 }
  
 #scene {
@@ -16,6 +17,7 @@ body {
   position: relative;
   overflow: hidden;
   background: #07070f;
+  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
  
 #bg-left, #bg-right {
@@ -25,33 +27,44 @@ body {
   height: 100%;
   z-index: 0;
   overflow: hidden;
+  animation: fadeInPage 1s ease-in-out forwards;
 }
 
-#bg-left  { left: 0; }
-#bg-right { right: 0; }
-#bg-left:active, #bg-right:active { cursor: grabbing; }
- 
+#bg-left, #bg-right {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+#bg-left  { left: -50%; }
+#bg-right { left: 50%; }
+
 .img-track {
   position: absolute;
   top: 0; left: 0;
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   will-change: transform;
   user-select: none;
+  transition: transform 0.3s ease;
 }
 
 .img-track img {
-  height: 100%;
-  width: auto;
+  height: 100vh;
+  width: 100%;
   display: block;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+  object-fit: cover;
+  position: absolute;
 }
- 
-.img-track#track-left  { right: 50vw; }
-.img-track#track-right { left: 50vw; }
+
 
 #bg-left::after, #bg-right::after {
   content: '';
@@ -60,8 +73,23 @@ body {
   background: rgba(5, 5, 14, 0.50);
   z-index: 1;
   pointer-events: none;
+  transition: opacity 2s ease;
 }
- 
+
+#bg-left.expanded::after,
+#bg-right.expanded::after {
+  opacity: 0;
+}
+
+#bg-left, #bg-right {
+  transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              left  1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.img-track {
+  transition: left 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .drag-hint {
   position: absolute;
   bottom: 58px;
@@ -69,11 +97,17 @@ body {
   letter-spacing: 0.22em;
   color: rgba(255,255,255,0.22);
   z-index: 22;
-  pointer-events: none;
   text-transform: uppercase;
   font-style: italic;
-  transition: opacity 1.5s ease;
+  transition: all 0.5s ease;
+  animation: fadeInPage 0.5s ease-in-out forwards;
+  cursor: pointer;
 }
+
+.drag-hint:hover {
+  color: rgba(255,255,255,0.55);
+}
+
 #dh-left  { left: 28px; }
 #dh-right { right: 28px; }
  
@@ -97,6 +131,7 @@ canvas {
   transform: translateX(-50%);
   z-index: 6;
   pointer-events: none;
+  animation: fadeInPage 2s ease-in-out forwards;
 }
  
 .world-label {
@@ -109,6 +144,7 @@ canvas {
   z-index: 20;
   font-weight: 300;
   pointer-events: none;
+  animation: fadeInPage 0.5s ease-in-out forwards;
 }
 #lbl-left  { left: 28px; }
 #lbl-right { right: 28px; }
@@ -123,6 +159,7 @@ canvas {
   z-index: 20;
   white-space: nowrap;
   pointer-events: none;
+  animation: fadeInPage 0.5s ease-in-out forwards;
 }
  
 #hint {
@@ -137,6 +174,7 @@ canvas {
   white-space: nowrap;
   pointer-events: none;
   transition: opacity 1.5s ease;
+  animation: fadeInPage 0.5s ease-in-out forwards;
 }
  
 #thread-layer {
@@ -233,9 +271,20 @@ canvas {
   padding: 6px 16px;
   cursor: pointer;
   z-index: 30;
+  animation: fadeInPage 0.5s ease-in-out forwards;
   transition: all 0.3s ease;
 }
 #reset-btn:hover {
   color: rgba(255,255,255,0.55);
   border-color: rgba(255,255,255,0.3);
+}
+
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
