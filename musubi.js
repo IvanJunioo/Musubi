@@ -154,7 +154,7 @@ function buildStars() {
 }
 
 function resize() {
-  W = scene.offsetHeight, H = scene.offsetHeight;
+  W = scene.offsetWidth, H = scene.offsetHeight;
   bgCanvas.width = W;
   bgCanvas.height = H;
   
@@ -206,6 +206,24 @@ function tickStars() {
   });
 }
 
+function drawThreads() {
+  Array.from(threadSVG.querySelectorAll('.tl')).forEach(e => e.remove());
+  threadLines.forEach(t => {
+    const age = Math.min(1, (Date.now() - t.born) / 1600);
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','path');
+    glow.setAttribute('d', t.d); glow.setAttribute('fill','none');
+    glow.setAttribute('stroke', `rgba(230,90,90,${0.09*age})`);
+    glow.setAttribute('stroke-width','5'); glow.setAttribute('class','tl');
+    threadSVG.appendChild(glow);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d', t.d); line.setAttribute('fill','none');
+    line.setAttribute('stroke', `rgba(220,100,100,${0.32*age})`);
+    line.setAttribute('stroke-width','0.9');
+    line.setAttribute('stroke-dasharray','4 5'); line.setAttribute('class','tl');
+    threadSVG.appendChild(line);
+  });
+}
+
 function spawnRipple(x, y) {
   if (scene_img !== 0) return;
   const r = document.createElement('div');
@@ -226,7 +244,8 @@ function revealNext(x, y) {
 
   const el = document.createElement('div');
   el.className = 'frag ' + m.side;
-  el.style.left = 2 * px + 'px'; el.style.top = py + 'px';
+  el.style.left = px + 'px';
+  el.style.top = py + 'px';
   el.innerHTML = m.text.replace(/\n/g, '<br>');
   fragLayer.appendChild(el);
   fragEls[revealed] = el;
@@ -312,15 +331,31 @@ function revealNext(x, y) {
 }
 
 function onSceneClick(e) {
+  if (e.target === dhLeft || e.target === dhRight || e.target === resetBtn) return;
   const rect = scene.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
   revealNext(x, y);
 }
 
+function reset() {
+  revealed = 0;
+  done=false;
+  threadLines=[];
+  fragEls=[];
+  fragLayer.innerHTML='';
+  Array.from(threadSVG.querySelectorAll('.tl')).forEach(e=>e.remove());
+  counterEl.textContent = '0 / 12 memories surfaced';
+  hintEl.style.opacity = '1';
+  dhLeft.style.opacity = '1';
+  dhRight.style.opacity='1';
+  endingEl.style.opacity = '0';
+}
+
 function loop() {
   drawBg();
   tickStars();
+  drawThreads();
   requestAnimationFrame(loop);
 }
 resize();
@@ -328,3 +363,4 @@ loop();
 
 scene.addEventListener('click', onSceneClick);
 window.addEventListener('resize', resize);
+resetBtn.addEventListener('click', e => { e.stopPropagation(); reset(); });
