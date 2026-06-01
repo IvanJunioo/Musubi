@@ -4,6 +4,7 @@ let threadLines = [], fragEls = [];
 let scene_img = 0; // 0 = 2 halves, 1 = just left, 2 = just right, 3 = ending
 let W = 0, H = 0;
 let stars = [];
+let threadSVG_fallback = [];
 
 const MEMS = [
   { side:'left',  rx:0.20, ry:0.36, text:'a name on the palm\nalready fading' },
@@ -111,9 +112,19 @@ dhLeft.addEventListener('click', () => {
     bgRight.classList.remove('expanded');
 
     trackLeft.style.left = '0';
+    fragEls.forEach(el => {
+      if (!el) return;
+      if (el.classList.contains('right')) el.style.opacity = '0';
+    });
+    threadSVG.style.opacity = '0';
 
     scene_img = 1;
   } else if (scene_img === 1) {
+    fragEls.forEach(el => {
+      if (!el) return;
+      if (el.classList.contains('right')) el.style.opacity = '1';
+    });
+    threadSVG.style.opacity = '';
     resetToInit();
   }
 });
@@ -133,8 +144,20 @@ dhRight.addEventListener('click', () => {
 
     trackRight.style.left = '0';
 
+    fragEls.forEach(el => {
+      if (!el) return;
+      if (el.classList.contains('left')) el.style.opacity = '0';
+    });
+    threadSVG.style.opacity = '0';
+
     scene_img = 2;
   } else if (scene_img === 2) {
+    fragEls.forEach(el => {
+      if (!el) return;
+      if (el.classList.contains('left')) el.style.opacity = '1';
+    });
+    threadSVG.style.opacity = '';
+
     resetToInit();
   }
 });
@@ -207,6 +230,7 @@ function tickStars() {
 }
 
 function drawThreads() {
+  if (scene_img !== 0) return;
   Array.from(threadSVG.querySelectorAll('.tl')).forEach(e => e.remove());
   threadLines.forEach(t => {
     const age = Math.min(1, (Date.now() - t.born) / 1600);
@@ -331,7 +355,7 @@ function revealNext(x, y) {
 }
 
 function onSceneClick(e) {
-  if (e.target === dhLeft || e.target === dhRight || e.target === resetBtn) return;
+  if (e.target === dhLeft || e.target === dhRight || e.target === resetBtn || scene_img !== 0) return;
   const rect = scene.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
