@@ -357,6 +357,97 @@ canvas {
   border-color: rgba(255,255,255,0.3);
 }
 
+#info {
+  background: #0b0b18;
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  padding: 56px 60px 72px;
+}
+#info h1 {
+  font-size: 42px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 6px;
+  line-height: 1;
+}
+#info .subtitle {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.06em;
+  margin-bottom: 52px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 52px;
+}
+
+.card {
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 22px 22px 26px;
+  background: rgba(255,255,255,0.02);
+}
+.card .tag {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(190,150,255,0.5);
+  margin-bottom: 12px;
+  font-style: normal;
+}
+.card h3 {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+.card p {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.78;
+  color: rgba(255,255,255,0.36);
+}
+
+.statement {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+}
+
+.statement h2 {
+  font-size: 11px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  margin-bottom: 22px;
+}
+.statement p {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.48);
+  margin-bottom: 20px;
+  max-width: 720px;
+}
+.statement p:last-child { margin-bottom: 0; }
+.red { color: rgba(220,110,110,0.75); }
+.divider-line {
+  width: 40px;
+  height: 0.5px;
+  background: rgba(255,255,255,0.12);
+  margin: 36px 0;
+}
+
+
 @keyframes fadeInPage {
   from {
     opacity: 0;
@@ -364,4 +455,9 @@ canvas {
   to {
     opacity: 1;
   }
+}
+
+@media (max-width: 700px) {
+  .cards { grid-template-columns: 1fr; }
+  #info { padding: 40px 28px 52px; }
 }
