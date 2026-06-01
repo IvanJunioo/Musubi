@@ -2,6 +2,8 @@ const MAX = 12;
 let revealed = 0, done = false;
 let threadLines = [], fragEls = [];
 let scene_img = 0; // 0 = 2 halves, 1 = just left, 2 = just right, 3 = ending
+let W = 0, H = 0;
+let stars = [];
 
 const MEMS = [
   { side:'left',  rx:0.20, ry:0.36, text:'braiding her\ngrandmother\'s hair' },
@@ -68,6 +70,7 @@ function resetToInit() {
   lblLeft.style.display = 'block';
   divider.style.display = 'block';
   resetBtn.style.display = 'block';
+  bgCanvas.style.opacity = '1';
 
   bgLeft.style.left = '-50%';
   bgRight.style.left = '50%';
@@ -82,6 +85,8 @@ function hideUI(left) {
   hintEl.style.display = 'none';
   divider.style.display = 'none';
   resetBtn.style.display = 'none';
+  bgCanvas.style.opacity = '0';
+  
   if (left) {
     lblRight.style.display = 'none';
     dhRight.style.display = 'none';
@@ -132,3 +137,82 @@ dhRight.addEventListener('click', () => {
     resetToInit();
   }
 });
+
+function buildStars() {
+  stars = [];
+  for (let i = 0; i < 131; ++i) {
+    stars.push({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.0 + 0.2,
+      a: Math.random() * 0.5 + 0.1,
+      vy: Math.random() * 0.15 + 0.04,
+      vx: (Math.random() - 0.5) * 0.14,
+      side: Math.random() < 0.5 ? 'L' : 'R',
+    })
+  }
+}
+
+function resize() {
+  W = scene.offsetHeight, H = scene.offsetHeight;
+  bgCanvas.width = W;
+  bgCanvas.height = H;
+  
+  threadSVG.setAttribute('width', W);
+  threadSVG.setAttribute('height', H);
+  threadSVG.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  buildStars();
+}
+
+function drawBg() {
+  ctx.clearRect(0, 0, W, H);
+  const left = ctx.createRadialGradient(W*0.22, H*0.60, 0, W*0.22, H*0.60, W*0.6);
+  left.addColorStop(0, 'rgba(15,42,105,0.18)');
+  left.addColorStop(1, 'rgba(7,7,15,0)');
+  ctx.fillStyle = left;
+  ctx.fillRect(0, 0, W/2, H);
+
+  const right = ctx.createRadialGradient(W*0.78, H*0.60, 0, W*0.78, H*0.60, W*0.6);
+  right.addColorStop(0, 'rgba(75,30,110,0.18)');
+  right.addColorStop(1, 'rgba(7,7,15,0)');
+  ctx.fillStyle = right;
+  ctx.fillRect(W/2, 0, W/2, H);
+
+  stars.forEach(s => {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fillStyle = s.side === 'R'
+      ? `rgba(220,185,255,${s.a})`
+      : `rgba(170,210,255,${s.a})`;
+    ctx.fill();
+  });
+}
+
+function tickStars() {
+  stars.forEach(s => {
+    s.y -= s.vy; s.x += s.vx;
+    if (s.y < -4) { s.y = H+4; s.x = Math.random()*W; }
+    if (s.x < 0) s.x = W; if (s.x > W) s.x = 0;
+  });
+}
+
+function spawnRipple(x, y) {
+  if (scene_img !== 0) return;
+  const r = document.createElement('div');
+  r.className = 'ripple';
+  r.style.left = `${x}px`;
+  r.style.top = `${y}px`;
+  fragLayer.appendChild(r);
+  setTimeout(() => {
+    r.remove();
+  }, 900);
+}
+
+function loop() {
+  drawBg();
+  tickStars();
+  requestAnimationFrame(loop);
+}
+resize();
+loop();
+window.addEventListener('resize', resize);
