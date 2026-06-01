@@ -36,6 +36,20 @@ const trackRight = document.getElementById('track-right');
 const bgLeft = document.getElementById('bg-left');
 const bgRight = document.getElementById('bg-right');
 const divider = document.getElementById('divider');
+const audio = document.getElementById('bgm');
+
+document.addEventListener('click', () => {
+  audio.muted = false;
+  audio.volume = 0;
+  audio.play();
+  let vol = 0;
+  const fade = setInterval(() => {
+    vol = Math.min(vol + 0.05, 0.8);
+    audio.volume = vol;
+    if (vol >= 0.8) clearInterval(fade);
+  }, 80);
+}, { once: true });
+
 
 if (done) {
   dhLeft.style.display = 'none';
@@ -63,7 +77,7 @@ function resetToInit() {
   scene.style.transform = 'translateX(0)';
 }
 
-function removeUiTexts(left) {
+function hideUI(left) {
   counterEl.style.display = 'none';
   hintEl.style.display = 'none';
   divider.style.display = 'none';
@@ -79,8 +93,8 @@ function removeUiTexts(left) {
 
 dhLeft.addEventListener('click', () => {
   if (scene_img === 0) {
-    removeUiTexts(true);
-    dhLeft.textContent = '← go back';
+    hideUI(true);
+    dhLeft.textContent = 'go back →';
 
     bgLeft.style.width = '100%';
     bgLeft.style.left = '0';
@@ -100,8 +114,8 @@ dhLeft.addEventListener('click', () => {
 
 dhRight.addEventListener('click', () => {
   if (scene_img === 0) {
-    removeUiTexts(false);
-    dhRight.textContent = 'go back →';
+    hideUI(false);
+    dhRight.textContent = '← go back';
 
     bgLeft.style.width = '100%';
     bgLeft.style.left = '-100%';

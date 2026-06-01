@@ -7,40 +7,42 @@
   <link rel="stylesheet" href="musubi.css">
 </head>
 <body>
-
-<div id="scene">
-  <div id="bg-left">
-    <div class="img-track" id="track-left">
-      <img src="taki1.jpg" alt="Taki — Tokyo">
+  <audio id="bgm" loop>
+    <source src="audio/30 なんでもないや.wav" type="audio/wav">
+  </audio>
+  <div id="scene">
+    <div id="bg-left">
+      <div class="img-track" id="track-left">
+        <img src="taki1.jpg" alt="Taki — Tokyo">
+      </div>
     </div>
-  </div>
-  <div id="bg-right">
-    <div class="img-track" id="track-right">
-      <img src="mitsuha1.jpg" alt="Mitsuha — Itomori">
+    <div id="bg-right">
+      <div class="img-track" id="track-right">
+        <img src="mitsuha1.jpg" alt="Mitsuha — Itomori">
+      </div>
     </div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="divider"></div>
+    <div class="world-label" id="lbl-left">Taki · Tokyo</div>
+    <div class="world-label" id="lbl-right">Mitsuha · Itomori</div>
+    <div id="counter">0 / 12 memories surfaced</div>
+    <div id="hint">click anywhere to surface a memory</div>
+    <div class="drag-hint" id="dh-left">← explore</div>
+    <div class="drag-hint" id="dh-right">explore →</div>
+
+    <svg id="thread-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="frag-layer"></div>
+
+    <div id="ending">
+      <h2>繋がっている</h2>
+      <p>we were always connected — and yet the distance remains</p>
+    </div>
+
+    <button id="reset-btn">reset</button>
   </div>
 
-  <canvas id="bg-canvas"></canvas>
-
-  <div id="divider"></div>
-  <div class="world-label" id="lbl-left">Taki · Tokyo</div>
-  <div class="world-label" id="lbl-right">Mitsuha · Itomori</div>
-  <div id="counter">0 / 12 memories surfaced</div>
-  <div id="hint">click anywhere to surface a memory</div>
-  <div class="drag-hint" id="dh-left">← explore</div>
-  <div class="drag-hint" id="dh-right">explore →</div>
-
-  <svg id="thread-layer" xmlns="http://www.w3.org/2000/svg"></svg>
-  <div id="frag-layer"></div>
-
-  <div id="ending">
-    <h2>繋がっている</h2>
-    <p>we were always connected — and yet the distance remains</p>
-  </div>
-
-  <button id="reset-btn">reset</button>
-</div>
-
-<script src="musubi.js"></script>
+  <script src="musubi.js"></script>
 </body>
 </html>
