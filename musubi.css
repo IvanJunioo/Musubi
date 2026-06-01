@@ -206,8 +206,8 @@ canvas {
   transition: opacity 1.8s ease;
   letter-spacing: 0.02em;
 }
-.frag.left  { color: rgba(220, 185, 255, 0.80); }
-.frag.right { color: rgba(160, 205, 255, 0.80); }
+.frag.left  { color: rgba(160, 205, 255, 0.80); }
+.frag.right { color: rgba(220, 185, 255, 0.80); }
 .frag.visible { opacity: 1; }
 .frag::before {
   content: '·';
@@ -257,7 +257,85 @@ canvas {
   color: rgba(255,255,255,0.38);
   letter-spacing: 0.1em;
 }
- 
+
+#bg-ending {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  animation: endingReveal 2.5s ease forwards;
+}
+
+#bg-ending img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+#bg-ending::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(7,7,15,0.3) 0%,
+    rgba(7,7,15,0)   35%,
+    rgba(7,7,15,0)   60%,
+    rgba(7,7,15,0.6) 100%
+  );
+  z-index: 1;
+}
+
+@keyframes endingReveal {
+  0%   { opacity: 0; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+#ending {
+  /* override the existing rule to add a staggered entrance */
+  transition: none !important;
+  opacity: 0;
+}
+
+#ending.visible {
+  animation: endingTextIn 2s ease forwards;
+}
+
+@keyframes endingTextIn {
+  0%   { opacity: 0; transform: translate(-50%, calc(-50% + 18px)); }
+  100% { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+#ending h2 {
+  animation: none;
+}
+
+#ending p {
+  animation: none;
+}
+
+#thread-layer.fading {
+  transition: opacity 1.5s ease;
+  opacity: 0;
+}
+
+#frag-layer.fading {
+  transition: opacity 1.5s ease;
+  opacity: 0;
+}
+
+#bg-left.converging {
+  left: 0 !important;
+  transition: left 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+#bg-right.converging {
+  left: 0 !important;
+  transition: left 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
 #reset-btn {
   position: absolute;
   bottom: 28px; right: 28px;

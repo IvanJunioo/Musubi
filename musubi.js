@@ -6,18 +6,18 @@ let W = 0, H = 0;
 let stars = [];
 
 const MEMS = [
-  { side:'left',  rx:0.20, ry:0.36, text:'braiding her\ngrandmother\'s hair' },
-  { side:'right', rx:0.78, ry:0.30, text:'a name on the palm\nalready fading' },
-  { side:'left',  rx:0.16, ry:0.60, text:'the taste of\nsomething\nshe cannot place' },
-  { side:'right', rx:0.80, ry:0.55, text:'sketching a face\nhe\'s never met' },
-  { side:'left',  rx:0.25, ry:0.78, text:'the comet overhead\nand the festival below' },
-  { side:'right', rx:0.75, ry:0.70, text:'running through\na city he doesn\'t own' },
-  { side:'left',  rx:0.14, ry:0.48, text:'waking up crying\nwithout knowing why' },
-  { side:'right', rx:0.82, ry:0.42, text:'Tokyo at 3am,\nalone on the train' },
-  { side:'left',  rx:0.27, ry:0.22, text:'the lake reflecting\nwhat is not there' },
-  { side:'right', rx:0.74, ry:0.80, text:'a call\nthat doesn\'t connect' },
-  { side:'left',  rx:0.21, ry:0.88, text:'musubi —\nthe god of joining' },
-  { side:'right', rx:0.72, ry:0.18, text:'her name\nin his own handwriting' },
+  { side:'left',  rx:0.20, ry:0.36, text:'a name on the palm\nalready fading' },
+  { side:'right', rx:0.78, ry:0.30, text:'braiding her\ngrandmother\'s hair' },
+  { side:'left',  rx:0.16, ry:0.60, text:'sketching a face\nhe\'s never met' },
+  { side:'right', rx:0.80, ry:0.55, text:'the taste of\nsomething\nshe cannot place' },
+  { side:'left',  rx:0.25, ry:0.78, text:'running through\na city he doesn\'t own' },
+  { side:'right', rx:0.75, ry:0.70, text:'the comet overhead\nand the festival below' },
+  { side:'left',  rx:0.14, ry:0.48, text:'Tokyo at 3am,\nalone on the train' },
+  { side:'right', rx:0.82, ry:0.42, text:'waking up crying\nwithout knowing why' },
+  { side:'left',  rx:0.27, ry:0.22, text:'a call\nthat doesn\'t connect' },
+  { side:'right', rx:0.74, ry:0.80, text:'the lake reflecting\nwhat is not there' },
+  { side:'left',  rx:0.21, ry:0.88, text:'her name\nin his own handwriting' },
+  { side:'right', rx:0.72, ry:0.18, text:'musubi —\nthe god of joining' },
 ];
 
 const scene = document.getElementById('scene');
@@ -38,16 +38,17 @@ const trackRight = document.getElementById('track-right');
 const bgLeft = document.getElementById('bg-left');
 const bgRight = document.getElementById('bg-right');
 const divider = document.getElementById('divider');
-const audio = document.getElementById('bgm');
+const audio1 = document.getElementById('bgm1');
+const audio2 = document.getElementById('bgm2');
 
 document.addEventListener('click', () => {
-  audio.muted = false;
-  audio.volume = 0;
-  audio.play();
+  audio1.muted = false;
+  audio1.volume = 0;
+  audio1.play();
   let vol = 0;
   const fade = setInterval(() => {
     vol = Math.min(vol + 0.05, 0.8);
-    audio.volume = vol;
+    audio1.volume = vol;
     if (vol >= 0.8) clearInterval(fade);
   }, 80);
 }, { once: true });
@@ -217,11 +218,104 @@ function spawnRipple(x, y) {
   }, 900);
 }
 
+function revealNext(x, y) {
+  if (done || revealed >= MAX) return;
+  const m = MEMS[revealed];
+  const px = m.rx * W, py = m.ry * H;
+  spawnRipple(x, y);
+
+  const el = document.createElement('div');
+  el.className = 'frag ' + m.side;
+  el.style.left = 2 * px + 'px'; el.style.top = py + 'px';
+  el.innerHTML = m.text.replace(/\n/g, '<br>');
+  fragLayer.appendChild(el);
+  fragEls[revealed] = el;
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+
+  if (revealed > 0) {
+    const prev = MEMS[revealed-1];
+    const x1=prev.rx*W, y1=prev.ry*H, x2=px, y2=py;
+    const cpx=(x1+x2)/2, cpy=(y1+y2)/2-(40+Math.random()*55);
+    threadLines.push({ d:`M${x1} ${y1} Q${cpx} ${cpy} ${x2} ${y2}`, born:Date.now() });
+  }
+
+  revealed++;
+  counterEl.textContent = `${revealed} / ${MAX} memories surfaced`;
+  if (revealed >= 3) {
+    dhLeft.style.opacity='0';
+    dhRight.style.opacity='0';
+  }
+  if (revealed >= 4) hintEl.style.opacity = '0.08';
+  if (revealed >= 7) hintEl.style.opacity = '0';
+  if (revealed >= MAX) {
+    done = true;
+    scene_img = 3;
+
+    threadSVG.classList.add('fading');
+    fragLayer.classList.add('fading');
+    bgCanvas.style.transition = 'opacity 1.5s ease';
+    bgCanvas.style.opacity = '0';
+    divider.style.transition = 'opacity 1.5s ease';
+    divider.style.opacity = '0';
+
+    audio2.muted = false;
+    audio2.volume = 0;
+    audio2.play();
+
+    const crossfade = setInterval(() => {
+      if (audio1.volume > 0) {
+        audio1.volume = Math.max(0, audio1.volume - 0.02);
+        if (audio1.volume === 0) audio1.pause();
+      }
+      if (audio1.volume === 0 && audio2.volume >= 0.8) {
+        clearInterval(crossfade);
+      }
+    }, 80);
+
+    setTimeout(() => {
+      bgLeft.classList.add('converging');
+      bgRight.classList.add('converging');
+    }, 600);
+
+    setTimeout(() => {
+      scene.innerHTML = `
+        <div id="bg-ending">
+          <img src="images/both1.jpg" alt="The meeting place">
+        </div>
+        <div id="ending">
+          <h2>繋がっている</h2>
+          <p>we were always connected — and yet the distance remains</p>
+        </div>
+      `;
+
+      setTimeout(() => {
+        document.getElementById('ending').classList.add('visible');
+      }, 1000);
+
+    }, 2000);
+
+    setTimeout(() => {
+      audio2.muted = false;
+      audio2.volume = 0;
+      audio2.play();
+
+      const fadeIn = setInterval(() => {
+        if (audio2.volume < 0.8) {
+          audio2.volume = Math.min(0.8, audio2.volume + 0.02);
+        } else {
+          clearInterval(fadeIn);
+        }
+      }, 80);
+    }, 1200);
+    
+  }
+}
+
 function onSceneClick(e) {
   const rect = scene.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
-  spawnRipple(x, y);
+  revealNext(x, y);
 }
 
 function loop() {
