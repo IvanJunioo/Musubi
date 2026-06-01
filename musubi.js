@@ -162,6 +162,15 @@ function resize() {
   threadSVG.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
   buildStars();
+  repositionFrags();
+}
+
+function repositionFrags() {
+  fragEls.forEach((el, i) => {
+    if (!el) return;
+    el.style.left = (MEMS[i].rx * W) + 'px';
+    el.style.top  = (MEMS[i].ry * H) + 'px';
+  });
 }
 
 function drawBg() {
@@ -208,6 +217,13 @@ function spawnRipple(x, y) {
   }, 900);
 }
 
+function onSceneClick(e) {
+  const rect = scene.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  spawnRipple(x, y);
+}
+
 function loop() {
   drawBg();
   tickStars();
@@ -215,4 +231,6 @@ function loop() {
 }
 resize();
 loop();
+
+scene.addEventListener('click', onSceneClick);
 window.addEventListener('resize', resize);
