@@ -27,7 +27,7 @@ body {
   height: 100%;
   z-index: 0;
   overflow: hidden;
-  animation: fadeInPage 1s ease-in-out forwards;
+  animation: fadeInPage 6s ease-in-out forwards;
 }
 
 #bg-left, #bg-right {
@@ -99,7 +99,7 @@ body {
   text-transform: uppercase;
   font-style: italic;
   transition: all 0.5s ease;
-  animation: fadeInPage 0.5s ease-in-out forwards;
+  animation: fadeInPage 4s ease-in-out forwards;
   cursor: pointer;
 }
 
@@ -131,7 +131,7 @@ canvas {
   transform: translateX(-50%);
   z-index: 6;
   pointer-events: none;
-  animation: fadeInPage 2s ease-in-out forwards;
+  animation: fadeInPage 10s ease-in-out forwards;
 }
  
 .world-label {
@@ -144,7 +144,7 @@ canvas {
   z-index: 20;
   font-weight: 300;
   pointer-events: none;
-  animation: fadeInPage 0.5s ease-in-out forwards;
+  animation: fadeInPage 4s ease-in-out forwards;
 }
 #lbl-left  { left: 28px; }
 #lbl-right { right: 28px; }
@@ -159,7 +159,7 @@ canvas {
   z-index: 20;
   white-space: nowrap;
   pointer-events: none;
-  animation: fadeInPage 0.5s ease-in-out forwards;
+  animation: fadeInPage 4s ease-in-out forwards;
 }
  
 #hint {
@@ -174,7 +174,7 @@ canvas {
   white-space: nowrap;
   pointer-events: none;
   transition: opacity 1.5s ease;
-  animation: fadeInPage 0.5s ease-in-out forwards;
+  animation: fadeInPage 4s ease-in-out forwards;
 }
  
 #thread-layer {
@@ -349,7 +349,7 @@ canvas {
   padding: 6px 16px;
   cursor: pointer;
   z-index: 30;
-  animation: fadeInPage 0.5s ease-in-out forwards;
+  animation: fadeInPage 4s ease-in-out forwards;
   transition: all 0.3s ease;
 }
 #reset-btn:hover {
@@ -447,6 +447,29 @@ canvas {
   margin: 36px 0;
 }
 
+#audio-notice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.75);
+  z-index: 50;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: notice-fade 3.5s ease forwards;
+}
+
+@keyframes notice-fade {
+  0%   { opacity: 0; }
+  30%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 @keyframes fadeInPage {
   from {
